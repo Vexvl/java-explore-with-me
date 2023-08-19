@@ -1,8 +1,8 @@
-package ru.practicum.service.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.dto.EndpointDto;
-import ru.practicum.service.model.Endpoint;
+import ru.practicum.EndpointDto;
+import ru.practicum.model.Endpoint;
 
 @UtilityClass
 public class EndpointMapper {
