@@ -2,49 +2,32 @@ version: '3.1'
 services:
   stats-server:
     build: statistics_server/service
-    container_name: stats-server-container
+    image: statistic_service_image
+    container_name: ewm-statistic-service-container
     ports:
       - "9090:9090"
     depends_on:
       - stats-db
     environment:
-      - SPRING_STATS_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/postgres
-      - POSTGRES_STATS_USER=postgres
-      - POSTGRES_STATS_PASSWORD=iamroot
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=iamroot
 
   stats-db:
     image: postgres:14-alpine
     container_name: stats-db-container
     volumes:
-      - /var/lib/postgresql/data/
-    ports:
-      - "6542:5432"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=iamroot
-
-  ewm-service:
-    build: main
-    container_name: ewm-service-container
-    ports:
-      - "8080:8080"
-    depends_on:
-      - ewm-db
-      - stats-server
-    environment:
-      - SPRING_EWM_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/postgres
-      - POSTGRES_EWM_USER=postgres
-      - POSTGRES_EWM_PASSWORD=iamroot
-
-  ewm-db:
-    image: postgres:14-alpine
-    container_name: ewn-db-container
-    volumes:
-      - /var/lib/postgresql/data/
+      - /var/lib/postgresql/stats/
     ports:
       - "6541:5432"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=iamroot
+
+      #ewm-service:
+      #ports:
+      #- "8080:8080"
+
+    #ewm-db:
+    #image: postgres:14-alpine

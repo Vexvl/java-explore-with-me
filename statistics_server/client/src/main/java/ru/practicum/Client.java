@@ -2,8 +2,6 @@ package ru.practicum;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.EndpointDto;
-import ru.practicum.ViewStatsDto;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
