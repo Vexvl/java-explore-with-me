@@ -12,7 +12,7 @@
 
 	<name>Explore With Me</name>
     <modules>
-        <module>main</module>
+        <module>ewm</module>
     </modules>
 
     <groupId>ru.practicum</groupId>

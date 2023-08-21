@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS EndpointHit
     name         VARCHAR(512)                            NOT NULL,
     uri          VARCHAR(512)                            NOT NULL,
     ip           VARCHAR(15)                             NOT NULL,
-    request_time TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
-    CONSTRAINT pk_endpoint PRIMARY KEY (id)
+    request_time TIMESTAMP WITHOUT TIME ZONE             NOT NULL
 );
+ALTER TABLE EndpointHit
+    DROP CONSTRAINT IF EXISTS pk_endpoint;

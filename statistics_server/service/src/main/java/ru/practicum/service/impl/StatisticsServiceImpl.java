@@ -28,7 +28,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if (unique) {
+        /* if (unique) {
             if (uris.isEmpty()) {
                 return statisticsServerServiceRepository.findWithoutUrisAndUniqueIp(start, end);
             } else {
@@ -41,5 +41,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 return statisticsServerServiceRepository.findAllWithUrisAndNotUniqueIp(start, end, uris);
             }
         }
+    }*/
+        return null;
     }
 }
