@@ -22,5 +22,6 @@ public class Endpoint {
     private String app;
     private String uri;
     private String ip;
+    @Column(name = "request_time")
     private LocalDateTime requestTime;
 }
