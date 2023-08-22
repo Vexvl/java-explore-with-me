@@ -28,20 +28,18 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        /* if (unique) {
-            if (uris.isEmpty()) {
-                return statisticsServerServiceRepository.findWithoutUrisAndUniqueIp(start, end);
+        if (unique != null && unique) {
+            if (uris != null && !uris.isEmpty()) {
+                return statisticsServerServiceRepository.findUniqueStatsByRequestTimeBetweenAndUriInOrderByIpDesc(start, end, uris);
             } else {
-                return statisticsServerServiceRepository.findWithUrisAndUniqueIp(start, end, uris);
+                return statisticsServerServiceRepository.findUniqueStatsByRequestTimeBetweenOrderByIpDesc(start, end);
             }
         } else {
-            if (uris.isEmpty()) {
-                return statisticsServerServiceRepository.findAllWithoutUrisAndNotUniqueIp(start, end);
+            if (uris != null && !uris.isEmpty()) {
+                return statisticsServerServiceRepository.findStatsByRequestTimeBetweenAndUriInOrderByIpDesc(start, end, uris);
             } else {
-                return statisticsServerServiceRepository.findAllWithUrisAndNotUniqueIp(start, end, uris);
+                return statisticsServerServiceRepository.findStatsByRequestTimeBetweenOrderByIpDesc(start, end);
             }
         }
-    }*/
-        return null;
     }
 }

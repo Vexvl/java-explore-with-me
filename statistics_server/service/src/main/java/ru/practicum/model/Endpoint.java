@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "endpoint")
+@Table(name = "EndpointHit")
 @Data
 @Builder
 @AllArgsConstructor
