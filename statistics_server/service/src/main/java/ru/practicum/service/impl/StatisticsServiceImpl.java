@@ -28,13 +28,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique != null && unique) {
             if (uris != null && !uris.isEmpty()) {
-                return statisticsServerServiceRepository.findUniqueStatsByTimestampBetweenAndUriInOrderByIpDesc(start, end, uris);
+                return statisticsServerServiceRepository.findUniqueStatsByTimestampBetweenAndAppNameInOrderByIpDesc(start, end, uris);
             } else {
-                return statisticsServerServiceRepository.findStatsByTimestampBetweenOrderByIpDesc(start, end);
+                return statisticsServerServiceRepository.findUniqueStatsByTimestampBetweenOrderByIpDesc(start, end);
             }
         } else {
             if (uris != null && !uris.isEmpty()) {
-                return statisticsServerServiceRepository.findStatsByTimestampBetweenAndUriInOrderByIpDesc(start, end, uris);
+                return statisticsServerServiceRepository.findStatsByTimestampBetweenAndAppNameInOrderByIpDesc(start, end, uris);
             } else {
                 return statisticsServerServiceRepository.findStatsByTimestampBetweenOrderByIpDesc(start, end);
             }

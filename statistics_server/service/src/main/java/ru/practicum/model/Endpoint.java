@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "EndpointHit")
+@Table(name = "endpoint_hit")
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,8 +18,10 @@ public class Endpoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String app;
-    private String uri;
+    @Column(name = "app")
+    private String appName;
+    @Column(name = "uri")
+    private String appUri;
     private String ip;
     private LocalDateTime timestamp;
 }

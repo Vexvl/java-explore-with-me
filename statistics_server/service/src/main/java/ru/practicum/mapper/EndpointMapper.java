@@ -9,8 +9,8 @@ public class EndpointMapper {
 
     public Endpoint toEndpoint(EndpointDto endpointDto) {
         return Endpoint.builder()
-                .app(endpointDto.getApp())
-                .uri(endpointDto.getUri())
+                .appName(endpointDto.getApp())
+                .appUri(endpointDto.getUri())
                 .ip(endpointDto.getIp())
                 .timestamp(endpointDto.getRequestTime())
                 .build();

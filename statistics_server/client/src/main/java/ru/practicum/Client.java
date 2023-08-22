@@ -8,6 +8,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -30,8 +31,14 @@ public class Client {
     }
 
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        ResponseEntity<ViewStatsDto[]> responseResult = restTemplate.getForEntity(path + "/stats" + "?start=" + start + "&end=" + end +
-                "&uris=" + uris + "&unique=" + unique, ViewStatsDto[].class);
+        String formattedStart = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(start);
+        String formattedEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(end);
+
+        ResponseEntity<ViewStatsDto[]> responseResult = restTemplate.getForEntity(
+                path + "/stats" + "?start=" + formattedStart + "&end=" + formattedEnd +
+                        "&uris=" + String.join(",", uris) + "&unique=" + unique,
+                ViewStatsDto[].class);
+
         return Arrays.asList(Objects.requireNonNull(responseResult.getBody()));
     }
 }
