@@ -22,7 +22,7 @@ services:
       - "6541:5432"
     environment:
       - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres1
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=iamroot
 
   ewm-db:
