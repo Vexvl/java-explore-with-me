@@ -12,33 +12,23 @@ import java.util.List;
 @Repository
 public interface StatisticsServerServiceRepository extends JpaRepository<Endpoint, Long> {
 
-    @Query(value = "select new ru.practicum.ViewStatsDto(s.appName, s.appUri , count(s.ip)) from Endpoint s" +
-            " where s.timestamp > ?1 " +
-            "and s.timestamp < ?2 " +
-            "group by s.appUri, s.appName " +
-            "order by count(s.ip) desc")
-    List<ViewStatsDto> findAllWithoutUrisAndNotUniqueIp(LocalDateTime before, LocalDateTime after);
+    @Query("SELECT NEW ru.practicum.ViewStatsDto(s.appName, s.appUri, " +
+            "COUNT(s.ip)) " +
+            "FROM Endpoint s " +
+            "WHERE s.timestamp > ?1 " +
+            "AND s.timestamp < ?2 " +
+            "AND (s.appUri IN ?3 OR ?3 IS NULL) " +
+            "GROUP BY s.appUri, s.appName " +
+            "ORDER BY COUNT(s.ip) DESC")
+    List<ViewStatsDto> findStatsWithoutUris(LocalDateTime before, LocalDateTime after, List<String> uris);
 
-    @Query(value = "select new ru.practicum.ViewStatsDto(s.appName, s.appUri , COUNT(s.ip)) from Endpoint s" +
-            " where s.timestamp > ?1 " +
-            "and s.timestamp < ?2 " +
-            "and s.appUri in ?3 " +
-            "group by s.appUri, s.appName " +
-            "order by count(s.ip) desc")
-    List<ViewStatsDto> findAllWithUrisAndNotUniqueIp(LocalDateTime before, LocalDateTime after, List<String> uris);
-
-    @Query(value = "select new ru.practicum.ViewStatsDto(s.appName, s.appUri , COUNT(distinct s.ip)) from Endpoint s" +
-            " where s.timestamp > ?1 " +
-            "and s.timestamp < ?2 " +
-            "group by s.appUri, s.appName " +
-            "order by count(s.ip) desc")
-    List<ViewStatsDto> findWithoutUrisAndUniqueIp(LocalDateTime before, LocalDateTime after);
-
-    @Query(value = "select new ru.practicum.ViewStatsDto(s.appName, s.appUri , COUNT(distinct s.ip)) from Endpoint s" +
-            " where s.timestamp > ?1 " +
-            "and s.timestamp < ?2 " +
-            "and s.appUri in ?3 " +
-            "group by s.appUri, s.appName " +
-            "order by count(s.ip) desc")
-    List<ViewStatsDto> findWithUrisAndUniqueIp(LocalDateTime before, LocalDateTime after, List<String> uris);
+    @Query("SELECT NEW ru.practicum.ViewStatsDto(s.appName, s.appUri, " +
+            "COUNT(DISTINCT s.ip)) " +
+            "FROM Endpoint s " +
+            "WHERE s.timestamp > ?1 " +
+            "AND s.timestamp < ?2 " +
+            "AND (s.appUri IN ?3 OR ?3 IS NULL) " +
+            "GROUP BY s.appUri, s.appName " +
+            "ORDER BY COUNT(s.ip) DESC")
+    List<ViewStatsDto> findStatsWithUris(LocalDateTime before, LocalDateTime after, List<String> uris);
 }

@@ -2,7 +2,7 @@ package ru.practicum;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Service
+@Component
 public class Client {
 
     private final String path = "http://localhost:9090";
