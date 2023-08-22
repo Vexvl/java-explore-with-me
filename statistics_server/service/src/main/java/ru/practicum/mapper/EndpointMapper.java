@@ -12,7 +12,7 @@ public class EndpointMapper {
                 .app(endpointDto.getApp())
                 .uri(endpointDto.getUri())
                 .ip(endpointDto.getIp())
-                .requestTime(endpointDto.getRequestTime())
+                .timestamp(endpointDto.getRequestTime())
                 .build();
     }
 }

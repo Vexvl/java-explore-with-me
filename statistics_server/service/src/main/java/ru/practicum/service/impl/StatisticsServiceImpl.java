@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.EndpointDto;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.mapper.EndpointMapper;
-import ru.practicum.model.Endpoint;
 import ru.practicum.repository.StatisticsServerServiceRepository;
 import ru.practicum.service.StatisticsService;
 
@@ -21,24 +20,23 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final StatisticsServerServiceRepository statisticsServerServiceRepository;
 
     @Override
-    public void saveEndpoint(EndpointDto endpointHitDto) {
-        Endpoint endpointHit = EndpointMapper.toEndpoint(endpointHitDto);
-        statisticsServerServiceRepository.save(endpointHit);
+    public void saveEndpoint(EndpointDto endpointDto) {
+        statisticsServerServiceRepository.save(EndpointMapper.toEndpoint(endpointDto));
     }
 
     @Override
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique != null && unique) {
             if (uris != null && !uris.isEmpty()) {
-                return statisticsServerServiceRepository.findUniqueStatsByRequestTimeBetweenAndUriInOrderByIpDesc(start, end, uris);
+                return statisticsServerServiceRepository.findUniqueStatsByTimestampBetweenAndUriInOrderByIpDesc(start, end, uris);
             } else {
-                return statisticsServerServiceRepository.findUniqueStatsByRequestTimeBetweenOrderByIpDesc(start, end);
+                return statisticsServerServiceRepository.findStatsByTimestampBetweenOrderByIpDesc(start, end);
             }
         } else {
             if (uris != null && !uris.isEmpty()) {
-                return statisticsServerServiceRepository.findStatsByRequestTimeBetweenAndUriInOrderByIpDesc(start, end, uris);
+                return statisticsServerServiceRepository.findStatsByTimestampBetweenAndUriInOrderByIpDesc(start, end, uris);
             } else {
-                return statisticsServerServiceRepository.findStatsByRequestTimeBetweenOrderByIpDesc(start, end);
+                return statisticsServerServiceRepository.findStatsByTimestampBetweenOrderByIpDesc(start, end);
             }
         }
     }

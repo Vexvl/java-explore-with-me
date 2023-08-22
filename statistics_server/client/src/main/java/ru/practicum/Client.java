@@ -19,9 +19,9 @@ public class Client {
     private final String path = "http://localhost:9090";
     private final RestTemplate restTemplate;
 
-    public Client(@Value("${statistics_service.url}") String serverUrl) {
+    public Client() {
         this.restTemplate = new RestTemplateBuilder()
-                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+                .uriTemplateHandler(new DefaultUriBuilderFactory(path))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build();
     }

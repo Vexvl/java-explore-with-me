@@ -11,11 +11,11 @@ import java.util.List;
 @Repository
 public interface StatisticsServerServiceRepository extends JpaRepository<Endpoint, Long> {
 
-    List<ViewStatsDto> findStatsByRequestTimeBetweenAndUriInOrderByIpDesc(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<ViewStatsDto> findStatsByTimestampBetweenAndUriInOrderByIpDesc(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    List<ViewStatsDto> findStatsByRequestTimeBetweenOrderByIpDesc(LocalDateTime start, LocalDateTime end);
+    List<ViewStatsDto> findStatsByTimestampBetweenOrderByIpDesc(LocalDateTime start, LocalDateTime end);
 
-    List<ViewStatsDto> findUniqueStatsByRequestTimeBetweenAndUriInOrderByIpDesc(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<ViewStatsDto> findUniqueStatsByTimestampBetweenAndUriInOrderByIpDesc(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    List<ViewStatsDto> findUniqueStatsByRequestTimeBetweenOrderByIpDesc(LocalDateTime start, LocalDateTime end);
+    List<ViewStatsDto> findUniqueStatsByTimestampBetweenOrderByIpDesc(LocalDateTime start, LocalDateTime end);
 }

@@ -18,10 +18,8 @@ public class Endpoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
     private String app;
     private String uri;
     private String ip;
-    @Column(name = "request_time")
-    private LocalDateTime requestTime;
+    private LocalDateTime timestamp;
 }
