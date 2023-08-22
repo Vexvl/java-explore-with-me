@@ -15,7 +15,7 @@
     <modules>
         <module>client</module>
         <module>dto</module>
-        <module>ewm-service</module>
+        <module>service</module>
     </modules>
 
     <properties>
