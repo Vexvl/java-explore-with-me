@@ -3,6 +3,7 @@ package ru.practicum.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.EndpointDto;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.mapper.EndpointMapper;
@@ -20,11 +21,13 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final StatisticsServerServiceRepository statisticsServerServiceRepository;
 
     @Override
+    @Transactional
     public void saveEndpoint(EndpointDto endpointDto) {
         statisticsServerServiceRepository.save(EndpointMapper.toEndpoint(endpointDto));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique != null && unique) {
             if (uris.isEmpty()) {
