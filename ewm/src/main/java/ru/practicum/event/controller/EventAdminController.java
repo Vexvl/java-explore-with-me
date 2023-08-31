@@ -37,7 +37,6 @@ public class EventAdminController {
                                         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                         @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
                                         @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
-        log.info("conrtoller");
         return eventsService.getEventsAdminParams(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

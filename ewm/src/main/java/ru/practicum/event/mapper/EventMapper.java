@@ -64,18 +64,18 @@ public class EventMapper {
 
     public Event toEvent(NewEventDto newEventDto, User user, Category category) {
         return Event.builder()
-                .participantLimit(newEventDto.getParticipantLimit())
-                .requestModeration(newEventDto.getRequestModeration())
-                .title(newEventDto.getTitle())
+                .annotation(newEventDto.getAnnotation())
+                .category(category)
                 .createdOn(LocalDateTime.now())
                 .description(newEventDto.getDescription())
                 .eventDate(newEventDto.getEventDate())
                 .initiator(user)
+                .paid(newEventDto.getPaid())
+                .participantLimit(newEventDto.getParticipantLimit())
+                .requestModeration(newEventDto.getRequestModeration())
+                .title(newEventDto.getTitle())
                 .latitude(newEventDto.getLocation().getLatitude())
                 .longitude(newEventDto.getLocation().getLongitude())
-                .annotation(newEventDto.getAnnotation())
-                .category(category)
-                .paid(newEventDto.getPaid())
                 .build();
     }
 
