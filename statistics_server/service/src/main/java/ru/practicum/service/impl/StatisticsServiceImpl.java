@@ -30,7 +30,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if (start.isAfter(end)) {
+        if (start == null || end == null || start.isAfter(end)) {
             throw new WrongTimeException("Start after end time");
         }
         if (unique != null && unique) {
