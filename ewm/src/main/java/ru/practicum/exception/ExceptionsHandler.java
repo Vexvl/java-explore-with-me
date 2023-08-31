@@ -51,6 +51,7 @@ public class ExceptionsHandler {
     public ErrorResponse handleWrongEventStateException(WrongEventStateException e) {
         return new ErrorResponse(e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleEmailExistsEmail(EmailExistsEmail e) {

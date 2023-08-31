@@ -35,6 +35,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long categoryId) {
         categoryRepository.findById(categoryId).orElseThrow(() -> new AbsenceException("Category not exists"));
+        if (eventRepository.existsByCategoryId(categoryId)) {
+            throw new CategoryDeleteException("Category used in Events");
+        }
         categoryRepository.deleteById(categoryId);
     }
 

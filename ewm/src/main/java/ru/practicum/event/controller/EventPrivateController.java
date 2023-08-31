@@ -10,9 +10,6 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
 import ru.practicum.event.service.EventService;
-import ru.practicum.request.dto.ParticipationRequestDto;
-import ru.practicum.request.model.EventRequestStatusUpdateRequest;
-import ru.practicum.request.model.EventRequestStatusUpdateResult;
 import ru.practicum.request.service.RequestService;
 import ru.practicum.validator.EventStartBefore;
 
