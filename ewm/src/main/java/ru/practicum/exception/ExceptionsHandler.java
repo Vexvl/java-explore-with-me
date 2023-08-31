@@ -42,7 +42,6 @@ public class ExceptionsHandler {
     @ExceptionHandler({ValidationException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validException(ValidationException e) {
-        log.error(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 

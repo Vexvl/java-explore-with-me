@@ -6,7 +6,6 @@ import lombok.Data;
 import ru.practicum.validator.ValidationGroups;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -15,9 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class NewCompilationDto {
     @NotBlank(groups = ValidationGroups.Create.class)
-    @NotNull
-    @Size(max = 49)
-    private final String title;
-    private final Boolean pinned;
-    private final List<Long> events = List.of();
+    @Size(max = 50)
+    private String title;
+    private Boolean pinned;
+    private List<Long> events;
 }
