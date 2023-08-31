@@ -16,7 +16,7 @@ import java.util.List;
 public class NewCompilationDto {
     @NotBlank(groups = ValidationGroups.Create.class)
     @NotNull
-    @Size(max = 50)
+    @Size(max = 49)
     private final String title;
     private final Boolean pinned;
     private final List<Long> events = List.of();
