@@ -86,10 +86,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> eventViews = getEventsViews(eventsPage.getContent());
 
         List<Event> eventsWithHits = eventsPage.getContent().stream()
-                .map(event -> {
-                    event.setViews(eventViews.getOrDefault(event.getId(), 0L));
-                    return event;
-                })
+                .peek(event -> event.setViews(eventViews.getOrDefault(event.getId(), 0L)))
                 .collect(Collectors.toList());
 
         return eventsWithHits.stream()
@@ -233,10 +230,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> eventViews = getEventsViews(eventsPage.getContent());
 
         List<Event> eventsWithHits = eventsPage.getContent().stream()
-                .map(event -> {
-                    event.setViews(eventViews.getOrDefault(event.getId(), 0L));
-                    return event;
-                })
+                .peek(event -> event.setViews(eventViews.getOrDefault(event.getId(), 0L)))
                 .collect(Collectors.toList());
 
         return eventsWithHits.stream()
