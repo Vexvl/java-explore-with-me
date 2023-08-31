@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.service.CompilationService;
+import ru.practicum.validator.ValidationGroups;
 
 import javax.validation.Valid;
 
@@ -22,6 +23,7 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Validated(ValidationGroups.Create.class)
     public CompilationDto addCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
         return compilationService.addCompilation(newCompilationDto);
     }
@@ -34,6 +36,7 @@ public class CompilationAdminController {
 
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
+    @Validated(ValidationGroups.Update.class)
     public CompilationDto updateCompilation(@PathVariable(name = "compId") Long compilationId, @RequestBody @Valid NewCompilationDto newCompilationDto) {
         return compilationService.updateCompilation(compilationId, newCompilationDto);
     }

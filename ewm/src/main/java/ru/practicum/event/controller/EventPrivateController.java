@@ -26,7 +26,6 @@ import java.util.List;
 public class EventPrivateController {
 
     private final EventService eventsService;
-    private final RequestService requestService;
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
