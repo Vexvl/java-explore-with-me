@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private final String APP = "EwmService";
+    private final String appName = "EwmService";
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -119,7 +119,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new AbsenceException("Published events not exists"));
 
         client.saveEndpoint(EndpointDto.builder()
-                .app(APP)
+                .app(appName)
                 .uri("/events/" + id)
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
@@ -209,7 +209,7 @@ public class EventServiceImpl implements EventService {
             throw new EventWrongTimeException("Wrong event time");
         }
         client.saveEndpoint(EndpointDto.builder()
-                .app(APP)
+                .app(appName)
                 .uri("/events")
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
