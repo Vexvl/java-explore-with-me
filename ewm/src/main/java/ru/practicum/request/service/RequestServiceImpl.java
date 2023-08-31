@@ -35,7 +35,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public ParticipationRequestDto addRequest(Long userId, Long eventId) {
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new ParticipationRequestFailException("Event exists"));
         User user = userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         if (requestRepository.existsByRequesterIdAndEventId(userId, eventId)) {
             throw new ParticipationRequestFailException("Request exists");
