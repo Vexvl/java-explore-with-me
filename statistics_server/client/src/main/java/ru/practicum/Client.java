@@ -16,19 +16,19 @@ import java.util.List;
 @Service
 public class Client {
 
-    private final String BASE_URL = "http://localhost:9090";
+    private final String url = "http://localhost:9090";
 
     private final RestTemplate restTemplate;
 
     public Client(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(BASE_URL))
+                .uriTemplateHandler(new DefaultUriBuilderFactory(url))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build();
     }
 
     public void saveEndpoint(EndpointDto endpointDto) {
-        String endpointUrl = BASE_URL + "/hit";
+        String endpointUrl = url + "/hit";
         restTemplate.postForLocation(endpointUrl, endpointDto);
     }
 
@@ -36,7 +36,7 @@ public class Client {
         String formattedStart = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(start);
         String formattedEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(end);
 
-        String statsUrl = BASE_URL + "/stats" +
+        String statsUrl = url + "/stats" +
                 "?start=" + formattedStart +
                 "&end=" + formattedEnd +
                 "&uris=" + String.join(",", uris) +
