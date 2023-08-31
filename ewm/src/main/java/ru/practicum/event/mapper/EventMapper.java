@@ -56,7 +56,7 @@ public class EventMapper {
                 .eventDate(updateEventDto.getEventDate() != null ?
                         updateEventDto.getEventDate() : event.getEventDate())
                 .lon(updateEventDto.getLocation() != null ?
-                        updateEventDto.getLocation().getLog() : event.getLon())
+                        updateEventDto.getLocation().getLon() : event.getLon())
                 .lat(updateEventDto.getLocation() != null ?
                         updateEventDto.getLocation().getLat() : event.getLat())
                 .build();
@@ -75,7 +75,7 @@ public class EventMapper {
                 .requestModeration(newEventDto.getRequestModeration())
                 .title(newEventDto.getTitle())
                 .lat(newEventDto.getLocation().getLat())
-                .lon(newEventDto.getLocation().getLog())
+                .lon(newEventDto.getLocation().getLon())
                 .build();
     }
 
@@ -84,7 +84,7 @@ public class EventMapper {
                 .annotation(event.getAnnotation())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(Location.builder()
-                        .log(event.getLon())
+                        .lon(event.getLon())
                         .lat(event.getLat())
                         .build())
                 .paid(event.getPaid())
