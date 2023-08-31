@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class Client {
 
-    private final String url = "http://localhost:9090";
+    private final String url = "http://stats-server:9090";
 
     private final RestTemplate restTemplate;
 
