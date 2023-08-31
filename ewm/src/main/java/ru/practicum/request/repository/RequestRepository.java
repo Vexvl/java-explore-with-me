@@ -21,5 +21,5 @@ public interface RequestRepository extends JpaRepository<ParticipationRequest, L
     Boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
 
     @Query("SELECT COUNT(r) FROM ParticipationRequest r WHERE r.event.id = :eventId AND r.status = 'CONFIRMED'")
-    Long findConfirmed(@Param("eventId") int eventId);
+    Long findConfirmed(@Param("eventId") Long eventId);
 }

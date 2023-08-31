@@ -1,6 +1,7 @@
 package ru.practicum.request.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventState;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
 
@@ -83,41 +85,45 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public EventRequestStatusUpdateResult changeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AbsenceException("User not exists"));
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new AbsenceException("Event not exists"));
+        userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
+        Long alreadyConfirmed = requestRepository.findConfirmed(eventId);
 
-        int alreadyConfirmed = Math.toIntExact(event.getConfirmedRequest());
-        int availableSlots = event.getParticipantLimit() - alreadyConfirmed;
-        if (availableSlots <= 0) {
+        if (event.getParticipantLimit() <= alreadyConfirmed) {
             throw new ParticipationRequestFailException("No vacancies");
         }
 
         List<ParticipationRequest> queryRequests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
-        if (!queryRequests.stream().allMatch(request -> request.getStatus().equals(RequestStatus.PENDING))) {
-            throw new ParticipationRequestFailException("Not all PENDING");
+        if (!queryRequests.isEmpty()) {
+            for (ParticipationRequest request : queryRequests) {
+                if (!request.getStatus().equals(RequestStatus.PENDING)) {
+                    throw new ParticipationRequestFailException("Not all state PENDING");
+                }
+            }
         }
 
-        List<ParticipationRequest> result = new ArrayList<>();
-        int confirmedCount = Math.min(availableSlots, queryRequests.size());
+        if (eventRequestStatusUpdateRequest.getStatus().equals(RequestStatus.REJECTED)) {
+            queryRequests.forEach(request -> request.setStatus(RequestStatus.REJECTED));
+        } else {
+            long availableVacancies = event.getParticipantLimit() - alreadyConfirmed;
+            long numConfirmed = Math.min(availableVacancies, queryRequests.size());
 
-        for (int i = 0; i < confirmedCount; i++) {
-            ParticipationRequest request = queryRequests.get(i);
-            request.setStatus(RequestStatus.CONFIRMED);
-            result.add(request);
+            for (int i = 0; i < numConfirmed; i++) {
+                ParticipationRequest request = queryRequests.get(i);
+                request.setStatus(RequestStatus.CONFIRMED);
+            }
+
+            for (long i = numConfirmed; i < queryRequests.size(); i++) {
+                ParticipationRequest request = queryRequests.get((int) i);
+                request.setStatus(RequestStatus.REJECTED);
+            }
+
+            event.setConfirmedRequest(alreadyConfirmed + numConfirmed);
+            eventRepository.save(event);
         }
 
-        for (int i = confirmedCount; i < queryRequests.size(); i++) {
-            ParticipationRequest request = queryRequests.get(i);
-            request.setStatus(RequestStatus.REJECTED);
-            result.add(request);
-        }
+        List<ParticipationRequest> savedRequests = requestRepository.saveAll(queryRequests);
+        return RequestMapper.toEventRequestStatusUpdateResult(savedRequests);
 
-        event.setConfirmedRequest((long) (alreadyConfirmed + confirmedCount));
-        eventRepository.save(event);
-        List<ParticipationRequest> savedResult = requestRepository.saveAll(result);
-
-        return RequestMapper.toEventRequestStatusUpdateResult(savedResult);
     }
 }
