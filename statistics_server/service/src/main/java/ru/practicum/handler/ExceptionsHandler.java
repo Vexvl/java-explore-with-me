@@ -9,11 +9,6 @@ import ru.practicum.exception.WrongTimeException;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleUnhandledException(Exception e) {
-        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @ExceptionHandler(WrongTimeException.class)
     public ResponseEntity<String> handleWrongTimeException(WrongTimeException e) {
         return new ResponseEntity<>("WrongTimeException", HttpStatus.BAD_REQUEST);
