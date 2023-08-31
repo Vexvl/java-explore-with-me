@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.EndpointDto;
 import ru.practicum.ViewStatsDto;
+import ru.practicum.exception.WrongTimeException;
 import ru.practicum.mapper.EndpointMapper;
 import ru.practicum.repository.StatisticsServerServiceRepository;
 import ru.practicum.service.StatisticsService;
@@ -29,6 +30,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        if (start.isAfter(end)) {
+            throw new WrongTimeException("Start after end time");
+        }
         if (unique != null && unique) {
             if (uris.isEmpty()) {
                 return statisticsServerServiceRepository.findStatsWithUris(start, end, null);
