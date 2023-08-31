@@ -1,5 +1,6 @@
 package ru.practicum.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +19,11 @@ public class Endpoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String ip;
     @Column(name = "app")
     private String appName;
     @Column(name = "uri")
     private String appUri;
-    private String ip;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
 }

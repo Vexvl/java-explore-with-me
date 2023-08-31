@@ -1,8 +1,10 @@
 package ru.practicum;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -11,34 +13,41 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-@Component
+@Service
 public class Client {
 
-    private final String path = "http://localhost:9090";
+    private final String BASE_URL = "http://localhost:9090";
+
     private final RestTemplate restTemplate;
 
-    public Client() {
-        this.restTemplate = new RestTemplateBuilder()
-                .uriTemplateHandler(new DefaultUriBuilderFactory(path))
+    public Client(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder
+                .uriTemplateHandler(new DefaultUriBuilderFactory(BASE_URL))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build();
     }
 
     public void saveEndpoint(EndpointDto endpointDto) {
-        restTemplate.postForLocation(path + "/hit", endpointDto);
+        String endpointUrl = BASE_URL + "/hit";
+        restTemplate.postForLocation(endpointUrl, endpointDto);
     }
 
     public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         String formattedStart = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(start);
         String formattedEnd = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(end);
 
-        ResponseEntity<ViewStatsDto[]> responseResult = restTemplate.getForEntity(
-                path + "/stats" + "?start=" + formattedStart + "&end=" + formattedEnd +
-                        "&uris=" + String.join(",", uris) + "&unique=" + unique,
-                ViewStatsDto[].class);
+        String statsUrl = BASE_URL + "/stats" +
+                "?start=" + formattedStart +
+                "&end=" + formattedEnd +
+                "&uris=" + String.join(",", uris) +
+                "&unique=" + unique;
 
-        return Arrays.asList(Objects.requireNonNull(responseResult.getBody()));
+        ResponseEntity<ViewStatsDto[]> responseResult = restTemplate.getForEntity(statsUrl, ViewStatsDto[].class);
+        if (responseResult.getStatusCode() == HttpStatus.OK && responseResult.getBody() != null) {
+            return Arrays.asList(responseResult.getBody());
+        } else {
+            throw new RuntimeException("Error fetching view stats");
+        }
     }
 }
