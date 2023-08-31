@@ -3,6 +3,7 @@ package ru.practicum.request.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventState;
 import ru.practicum.event.repository.EventRepository;
@@ -32,6 +33,7 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public ParticipationRequestDto addRequest(Long userId, Long eventId) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
         User user = userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
@@ -58,6 +60,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getUserRequest(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         return requestRepository.findAllByRequesterId(userId).stream().map(RequestMapper::toParticipationEventDto)
@@ -65,6 +68,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         requestRepository.findById(requestId).orElseThrow(() -> new AbsenceException("Request not exists"));
@@ -75,6 +79,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventParticipants(Long userId, Long eventId) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
@@ -83,6 +88,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public EventRequestStatusUpdateResult changeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));

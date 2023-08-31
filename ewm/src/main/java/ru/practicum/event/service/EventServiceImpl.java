@@ -26,6 +26,7 @@ import ru.practicum.exception.WrongEventStateException;
 import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
@@ -44,6 +45,7 @@ public class EventServiceImpl implements EventService {
     private final Client client;
 
     @Override
+    @Transactional
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exist"));
         Category category = categoryRepository.findById(newEventDto.getCategory()).orElseThrow(() -> new AbsenceException("Category not exist"));
@@ -54,6 +56,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventFullDto> getEventsAdminParams(List<Long> users, List<String> states, List<Integer> categories,
                                                    LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                    Integer from, Integer size) {
@@ -95,6 +98,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventShortDto> getUserEvents(Long userId, int from, int size) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
 
@@ -111,6 +115,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventFullDto getEventById(Long id, String ip) {
         Event event = eventRepository.findPublishedEventById(id)
                 .orElseThrow(() -> new AbsenceException("Published events not exists"));
@@ -129,6 +134,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEventAdmin(Long eventId, UpdateEventDto updateEventDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
         if (event.getState().equals(EventState.PUBLISHED) || event.getState().equals(EventState.REJECT_EVENT)) {
@@ -154,6 +160,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventFullDto getUserEventById(Long userId, Long eventId) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         Event event = eventRepository.findAllByIdAndInitiatorId(eventId, userId)
@@ -167,6 +174,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEvent(Long userId, Long eventId, UpdateEventDto updateEventDto) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
         Event event = eventRepository.findAllByIdAndInitiatorId(eventId, userId)
@@ -199,6 +207,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public List<EventFullDto> getEventsParams(String text, List<Integer> categories, Boolean paid,
                                                LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                Boolean onlyAvailable, String sort, Integer from, Integer size, String ip) {

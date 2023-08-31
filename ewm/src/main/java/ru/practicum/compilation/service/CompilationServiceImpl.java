@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.mapper.CompilationMapper;
@@ -25,6 +26,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
 
     @Override
+    @Transactional
     public CompilationDto addCompilation(NewCompilationDto newCompilationDto) {
         List<Event> events = eventRepository.findAllByIdIn(newCompilationDto.getEvents());
         Compilation compilation = CompilationMapper.toCompilation(newCompilationDto, events);
@@ -32,6 +34,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto updateCompilation(Long compilationId, NewCompilationDto newCompilationDto) {
         Compilation updateCompilation = compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new AbsenceException("Compilation not exist"));
@@ -41,12 +44,14 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CompilationDto getCompilation(Long compilationId) {
         return CompilationMapper.toCompilationDto(compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new AbsenceException("Compilation with id %d does not exist")));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return compilationRepository.findAll(new CompilationSpecification(pinned), pageable).stream()
@@ -55,6 +60,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilation(Long compilationId) {
         compilationRepository.findById(compilationId).orElseThrow(() -> new AbsenceException("Compilation not exists"));
         compilationRepository.deleteById(compilationId);

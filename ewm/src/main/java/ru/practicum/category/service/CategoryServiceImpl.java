@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
@@ -25,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
         if (categoryRepository.existsByName(newCategoryDto.getName())) {
             throw new NameExistsException("Name exist");
@@ -33,6 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(Long categoryId) {
         categoryRepository.findById(categoryId).orElseThrow(() -> new AbsenceException("Category not exists"));
         if (eventRepository.existsByCategoryId(categoryId)) {
@@ -42,6 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
         categoryRepository.findById(categoryId).orElseThrow(() -> new AbsenceException("Category not exists"));
         if (categoryRepository.existsByNameAndIdNot(newCategoryDto.getName(), categoryId)) {
@@ -51,12 +55,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryDto> getCategories(int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return categoryRepository.findAll(pageable).stream().map(CategoryMapper::toCategoryDto).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoryDto getCategoryById(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new AbsenceException("Category not exists"));
         return CategoryMapper.toCategoryDto(category);
