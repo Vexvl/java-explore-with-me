@@ -37,7 +37,7 @@ public class CompilationAdminController {
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     @Validated(ValidationGroups.Update.class)
-    public CompilationDto updateCompilation(@PathVariable(name = "compId") Long compilationId, @RequestBody @Valid NewCompilationDto newCompilationDto) {
+    public CompilationDto updateCompilation(@PathVariable(name = "compId") Long compilationId, @RequestBody NewCompilationDto newCompilationDto) {
         return compilationService.updateCompilation(compilationId, newCompilationDto);
     }
 }

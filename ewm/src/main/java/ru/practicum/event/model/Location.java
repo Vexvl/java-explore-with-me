@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Location {
-    public Float longitude;
-    private Float latitude;
+    public Float log;
+    private Float lat;
 }

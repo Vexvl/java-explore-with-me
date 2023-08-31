@@ -55,10 +55,10 @@ public class EventMapper {
                         updateEventDto.getDescription() : event.getDescription())
                 .eventDate(updateEventDto.getEventDate() != null ?
                         updateEventDto.getEventDate() : event.getEventDate())
-                .longitude(updateEventDto.getLocation() != null ?
-                        updateEventDto.getLocation().getLongitude() : event.getLongitude())
-                .latitude(updateEventDto.getLocation() != null ?
-                        updateEventDto.getLocation().getLatitude() : event.getLatitude())
+                .lon(updateEventDto.getLocation() != null ?
+                        updateEventDto.getLocation().getLog() : event.getLon())
+                .lat(updateEventDto.getLocation() != null ?
+                        updateEventDto.getLocation().getLat() : event.getLat())
                 .build();
     }
 
@@ -74,8 +74,8 @@ public class EventMapper {
                 .participantLimit(newEventDto.getParticipantLimit())
                 .requestModeration(newEventDto.getRequestModeration())
                 .title(newEventDto.getTitle())
-                .latitude(newEventDto.getLocation().getLatitude())
-                .longitude(newEventDto.getLocation().getLongitude())
+                .lat(newEventDto.getLocation().getLat())
+                .lon(newEventDto.getLocation().getLog())
                 .build();
     }
 
@@ -84,8 +84,8 @@ public class EventMapper {
                 .annotation(event.getAnnotation())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .location(Location.builder()
-                        .longitude(event.getLongitude())
-                        .latitude(event.getLatitude())
+                        .log(event.getLon())
+                        .lat(event.getLat())
                         .build())
                 .paid(event.getPaid())
                 .description(event.getDescription())

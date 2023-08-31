@@ -22,8 +22,8 @@ public class Event {
     private String annotation;
     private Long views;
     private String description;
-    private Float latitude;
-    private Float longitude;
+    private Float lat;
+    private Float lon;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category", referencedColumnName = "id", nullable = false)
     private Category category;
