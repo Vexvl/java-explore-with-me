@@ -18,6 +18,7 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,31 +83,41 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public EventRequestStatusUpdateResult changeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new AbsenceException("Event not exists"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AbsenceException("User not exists"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new AbsenceException("Event not exists"));
 
-        List<ParticipationRequest> queryRequests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
-
-        if (!queryRequests.stream().allMatch(request -> request.getStatus().equals(RequestStatus.PENDING))) {
-            throw new ParticipationRequestFailException("Not enough pending statuses");
-        }
-
-        long availableVacancies = event.getParticipantLimit() - requestRepository.countConfirmedRequests(eventId);
-        if (availableVacancies <= 0) {
+        int alreadyConfirmed = Math.toIntExact(event.getConfirmedRequest());
+        int availableSlots = event.getParticipantLimit() - alreadyConfirmed;
+        if (availableSlots <= 0) {
             throw new ParticipationRequestFailException("No vacancies");
         }
 
-        List<ParticipationRequest> toConfirm = queryRequests.subList(0, (int) Math.min(availableVacancies, queryRequests.size()));
-        List<ParticipationRequest> toReject = queryRequests.subList(toConfirm.size(), queryRequests.size());
+        List<ParticipationRequest> queryRequests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
+        if (!queryRequests.stream().allMatch(request -> request.getStatus().equals(RequestStatus.PENDING))) {
+            throw new ParticipationRequestFailException("Not all PENDING");
+        }
 
-        toConfirm.forEach(request -> request.setStatus(RequestStatus.CONFIRMED));
-        toReject.forEach(request -> request.setStatus(RequestStatus.REJECTED));
+        List<ParticipationRequest> result = new ArrayList<>();
+        int confirmedCount = Math.min(availableSlots, queryRequests.size());
 
-        List<ParticipationRequest> savedRequests = requestRepository.saveAll(queryRequests);
+        for (int i = 0; i < confirmedCount; i++) {
+            ParticipationRequest request = queryRequests.get(i);
+            request.setStatus(RequestStatus.CONFIRMED);
+            result.add(request);
+        }
 
+        for (int i = confirmedCount; i < queryRequests.size(); i++) {
+            ParticipationRequest request = queryRequests.get(i);
+            request.setStatus(RequestStatus.REJECTED);
+            result.add(request);
+        }
+
+        event.setConfirmedRequest((long) (alreadyConfirmed + confirmedCount));
         eventRepository.save(event);
+        List<ParticipationRequest> savedResult = requestRepository.saveAll(result);
 
-        return RequestMapper.toEventRequestStatusUpdateResult(savedRequests);
+        return RequestMapper.toEventRequestStatusUpdateResult(savedResult);
     }
-
 }

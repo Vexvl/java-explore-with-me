@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    private final static String APP = "EwmService";
+    private final String APP = "EwmService";
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
@@ -194,7 +194,7 @@ public class EventServiceImpl implements EventService {
                         state = EventState.PENDING;
                 }
             } catch (IllegalArgumentException e) {
-                throw new IllegalStateException("Not correct event State in query");
+                throw new IllegalStateException("IllegalStateException");
             }
         }
         return EventMapper.toEventFullDto(eventRepository.save(
