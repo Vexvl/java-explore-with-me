@@ -6,7 +6,6 @@ import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.dto.EventShortDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
