@@ -13,21 +13,21 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class UpdateEventDto {
+@NoArgsConstructor(force = true)
+public final class UpdateEventDto {
     @Size(min = 20, max = 2000)
-    private String annotation;
+    private final String annotation;
     @Size(min = 3, max = 120)
-    private String title;
+    private final String title;
     @Size(min = 20, max = 7000)
-    private String description;
-    private Boolean paid;
-    private Integer participantLimit;
-    private Boolean requestModeration;
-    private String stateAction;
-    private Long category;
-    private Location location;
+    private final String description;
+    private final Boolean paid;
+    private final Integer participantLimit;
+    private final Boolean requestModeration;
+    private final String stateAction;
+    private final Long category;
+    private final Location location;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate;
+    private final LocalDateTime eventDate;
 }

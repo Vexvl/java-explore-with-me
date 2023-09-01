@@ -13,25 +13,25 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class NewEventDto {
+@NoArgsConstructor(force = true)
+public final class NewEventDto {
     @NotBlank
     @Size(min = 3, max = 120)
-    private String title;
+    private final String title;
     @NotBlank
     @Size(min = 20, max = 2000)
-    private String annotation;
+    private final String annotation;
     @NotBlank
     @Size(min = 20, max = 7000)
-    private String description;
-    private Long category;
-    private Boolean paid = false;
-    private Location location;
-    private Integer participantLimit = 0;
-    private Boolean requestModeration = true;
+    private final String description;
+    private final Long category;
+    private final Boolean paid = false;
+    private final Location location;
+    private final Integer participantLimit = 0;
+    private final Boolean requestModeration = true;
 
     @NotNull
     @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate;
+    private final LocalDateTime eventDate;
 }

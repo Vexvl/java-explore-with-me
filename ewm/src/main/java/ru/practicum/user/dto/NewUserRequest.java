@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class NewUserRequest {
+public final class NewUserRequest {
     @NotBlank
     @Size(min = 2, max = 250)
-    private String name;
+    private final String name;
     @Email
     @NotBlank
     @Size(min = 6, max = 254)
-    private String email;
+    private final String email;
 }

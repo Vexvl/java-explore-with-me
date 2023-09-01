@@ -10,17 +10,17 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class EventShortDto {
-    private Long id;
+@NoArgsConstructor(force = true)
+public final class EventShortDto {
+    private final Long id;
     private CategoryDto category;
-    private Long confirmedRequests;
-    private String annotation;
-    private UserShortDto initiator;
-    private Boolean paid;
-    private String title;
-    private Long views;
+    private final Long confirmedRequests;
+    private final String annotation;
+    private final UserShortDto initiator;
+    private final Boolean paid;
+    private final String title;
+    private final Long views;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate;
+    private final LocalDateTime eventDate;
 }

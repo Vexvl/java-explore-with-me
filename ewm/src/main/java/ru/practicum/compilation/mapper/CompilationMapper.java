@@ -33,15 +33,6 @@ public class CompilationMapper {
                 .build();
     }
 
-    public CompilationDto toCompilationDto(Compilation compilation, List<EventShortDto> eventShortDtos) {
-        return CompilationDto.builder()
-                .id(compilation.getId())
-                .pinned(compilation.getPinned())
-                .title(compilation.getTitle())
-                .events(eventShortDtos)
-                .build();
-    }
-
     public Compilation updateCompilation(NewCompilationDto newCompilationDto, Compilation compilation, List<Event> events) {
         return Compilation.builder()
                 .title(newCompilationDto.getTitle() != null ?

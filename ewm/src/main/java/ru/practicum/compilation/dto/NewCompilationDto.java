@@ -13,11 +13,11 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class NewCompilationDto {
+@NoArgsConstructor(force = true)
+public final class NewCompilationDto {
     @NotBlank(groups = ValidationGroups.Create.class)
     @Size(max = 50)
-    private String title;
-    private Boolean pinned;
-    private List<Long> events = List.of();
+    private final String title;
+    private final Boolean pinned;
+    private final List<Long> events = List.of();
 }
