@@ -4,31 +4,17 @@ import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
+import ru.practicum.event.model.AdminParams;
+import ru.practicum.event.model.PublicParams;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
     EventFullDto addEvent(Long userId, NewEventDto newEventDto);
 
-    List<EventFullDto> getEventsAdminParams(List<Long> users,
-                                            List<String> states,
-                                            List<Integer> categories,
-                                            LocalDateTime rangeStart,
-                                            LocalDateTime rangeEnd,
-                                            Integer from,
-                                            Integer size);
+    List<EventFullDto> getEventsAdminParams(AdminParams adminParams);
 
-    List<EventFullDto> getEventsParams(String text,
-                                        List<Integer> categories,
-                                        Boolean paid,
-                                        LocalDateTime rangeStart,
-                                        LocalDateTime rangeEnd,
-                                        Boolean onlyAvailable,
-                                        String sort,
-                                        Integer from,
-                                        Integer size,
-                                        String ip);
+    List<EventFullDto> getEventsParams(PublicParams publicParams);
 
     List<EventShortDto> getUserEvents(Long userId, int from, int size);
 

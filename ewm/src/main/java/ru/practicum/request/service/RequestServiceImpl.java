@@ -101,13 +101,13 @@ public class RequestServiceImpl implements RequestService {
         List<ParticipationRequest> queryRequests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
         if (!queryRequests.isEmpty()) {
             for (ParticipationRequest request : queryRequests) {
-                if (!request.getStatus().equals(RequestStatus.PENDING)) {
+                if (!RequestStatus.PENDING.equals(request.getStatus())) {
                     throw new ParticipationRequestFailException("Not all state PENDING");
                 }
             }
         }
 
-        if (eventRequestStatusUpdateRequest.getStatus().equals(RequestStatus.REJECTED)) {
+        if (RequestStatus.REJECTED.equals(eventRequestStatusUpdateRequest.getStatus())) {
             queryRequests.forEach(request -> request.setStatus(RequestStatus.REJECTED));
         } else {
             long availableVacancies = event.getParticipantLimit() - alreadyConfirmed;
@@ -129,6 +129,5 @@ public class RequestServiceImpl implements RequestService {
 
         List<ParticipationRequest> savedRequests = requestRepository.saveAll(queryRequests);
         return RequestMapper.toEventRequestStatusUpdateResult(savedRequests);
-
     }
 }

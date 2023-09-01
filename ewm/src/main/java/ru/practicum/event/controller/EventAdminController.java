@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.UpdateEventDto;
+import ru.practicum.event.model.AdminParams;
 import ru.practicum.event.service.EventService;
 import ru.practicum.validator.EventStartBefore;
 
@@ -37,7 +38,18 @@ public class EventAdminController {
                                         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                         @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
                                         @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
-        return eventsService.getEventsAdminParams(users, states, categories, rangeStart, rangeEnd, from, size);
+
+        AdminParams adminParams = AdminParams.builder()
+                .users(users)
+                .states(states)
+                .categories(categories)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .from(from)
+                .size(size)
+                .build();
+
+        return eventsService.getEventsAdminParams(adminParams);
     }
 
     @PatchMapping("/events/{eventId}")

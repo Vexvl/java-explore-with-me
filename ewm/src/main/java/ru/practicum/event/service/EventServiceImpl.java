@@ -57,30 +57,28 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventFullDto> getEventsAdminParams(List<Long> users, List<String> states, List<Integer> categories,
-                                                   LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                                   Integer from, Integer size) {
-        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+    public List<EventFullDto> getEventsAdminParams(AdminParams adminParams) {
+        if (adminParams.getRangeStart() != null && adminParams.getRangeEnd() != null && adminParams.getRangeStart().isAfter(adminParams.getRangeEnd())) {
             throw new EventWrongTimeException("Wrong event time");
         }
-        if (rangeStart == null && rangeEnd == null) {
-            rangeStart = LocalDateTime.now();
+        if (adminParams.getRangeStart() == null && adminParams.getRangeEnd() == null) {
+            adminParams.setRangeStart(LocalDateTime.now());
         }
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = PageRequest.of(adminParams.getFrom() / adminParams.getSize(), adminParams.getSize());
 
         List<EventState> convertStates = null;
-        if (states != null) {
-            convertStates = states.stream()
+        if (adminParams.getStates() != null) {
+            convertStates = adminParams.getStates().stream()
                     .map(EventState::valueOf)
                     .collect(Collectors.toList());
         }
 
         EventCriteria criteria = EventCriteria.builder()
-                .users(users)
+                .users(adminParams.getUsers())
                 .states(convertStates)
-                .categories(categories)
-                .rangeStart(rangeStart)
-                .rangeEnd(rangeEnd)
+                .categories(adminParams.getCategories())
+                .rangeStart(adminParams.getRangeStart())
+                .rangeEnd(adminParams.getRangeEnd())
                 .build();
 
         EventSpecification eventSpecification = new EventSpecification(criteria);
@@ -147,13 +145,11 @@ public class EventServiceImpl implements EventService {
         EventState state = event.getState();
         if (updateEventDto.getStateAction() != null) {
             AdminRequestState adminRequestState = AdminRequestState.valueOf(updateEventDto.getStateAction());
-            switch (adminRequestState) {
-                case PUBLISH_EVENT:
-                    state = EventState.PUBLISHED;
-                    event.setPublishedOn(LocalDateTime.now());
-                    break;
-                case REJECT_EVENT:
-                    state = EventState.REJECT_EVENT;
+            if (adminRequestState == AdminRequestState.PUBLISH_EVENT) {
+                state = EventState.PUBLISHED;
+                event.setPublishedOn(LocalDateTime.now());
+            } else {
+                state = EventState.REJECT_EVENT;
             }
         }
         return EventMapper.toEventFullDto(eventRepository.save(EventMapper.updateEvent(updateEventDto, event, category, state)));
@@ -177,61 +173,69 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventFullDto updateEvent(Long userId, Long eventId, UpdateEventDto updateEventDto) {
         userRepository.findById(userId).orElseThrow(() -> new AbsenceException("User not exists"));
+
         Event event = eventRepository.findAllByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new AbsenceException("Events not exists"));
+                .orElseThrow(() -> new AbsenceException("Event not exists"));
+
         if (!(event.getState().equals(EventState.PENDING) || event.getState().equals(EventState.REJECT_EVENT))) {
             throw new WrongEventStateException("WrongEventStateException");
         }
+
         Category patchCategory = event.getCategory();
         if (updateEventDto.getCategory() != null) {
             patchCategory = categoryRepository.findById(updateEventDto.getCategory())
                     .orElseThrow(() -> new AbsenceException("Category not exists"));
         }
+
         EventState state = event.getState();
         if (updateEventDto.getStateAction() != null) {
+            UserRequestState updateState;
             try {
-                UserRequestState updateState = UserRequestState.valueOf(updateEventDto.getStateAction());
-                switch (updateState) {
-                    case CANCEL_REVIEW:
-                        state = EventState.CANCELED;
-                        break;
-                    case SEND_TO_REVIEW:
-                        state = EventState.PENDING;
-                }
+                updateState = UserRequestState.valueOf(updateEventDto.getStateAction());
             } catch (IllegalArgumentException e) {
                 throw new IllegalStateException("IllegalStateException");
             }
+
+            switch (updateState) {
+                case CANCEL_REVIEW:
+                    state = EventState.CANCELED;
+                    break;
+                case SEND_TO_REVIEW:
+                    state = EventState.PENDING;
+                    break;
+                default:
+                    throw new IllegalStateException("IllegalStateException");
+            }
         }
+
         return EventMapper.toEventFullDto(eventRepository.save(
                 EventMapper.updateEvent(updateEventDto, event, patchCategory, state)));
     }
 
     @Override
     @Transactional
-    public List<EventFullDto> getEventsParams(String text, List<Integer> categories, Boolean paid,
-                                               LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                               Boolean onlyAvailable, String sort, Integer from, Integer size, String ip) {
-        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+    public List<EventFullDto> getEventsParams(PublicParams publicParams) {
+        if (publicParams.getRangeStart() != null && publicParams.getRangeEnd() != null && publicParams.getRangeStart().isAfter(publicParams.getRangeEnd())) {
             throw new EventWrongTimeException("Wrong event time");
         }
         client.saveEndpoint(EndpointDto.builder()
                 .app(appName)
                 .uri("/events")
-                .ip(ip)
+                .ip(publicParams.getIp())
                 .timestamp(LocalDateTime.now())
                 .build());
-        if (rangeStart == null && rangeEnd == null) {
-            rangeStart = LocalDateTime.now();
+        if (publicParams.getRangeStart() == null && publicParams.getRangeEnd() == null) {
+            publicParams.setRangeStart(LocalDateTime.now());
         }
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = PageRequest.of(publicParams.getFrom() / publicParams.getSize(), publicParams.getSize());
         EventCriteria criteria = EventCriteria.builder()
                 .states(List.of(EventState.PUBLISHED))
-                .text(text)
-                .categories(categories)
-                .rangeEnd(rangeEnd)
-                .rangeStart(rangeStart)
-                .onlyAvailable(onlyAvailable)
-                .sortParam(sort != null ? SortParameter.valueOf(sort) : null)
+                .text(publicParams.getText())
+                .categories(publicParams.getCategories())
+                .rangeEnd(publicParams.getRangeEnd())
+                .rangeStart(publicParams.getRangeStart())
+                .onlyAvailable(publicParams.getOnlyAvailable())
+                .sortParam(publicParams.getSortParameter() != null ? SortParameter.valueOf(publicParams.getSortParameter()) : null)
                 .build();
         EventSpecification eventSpecification = new EventSpecification(criteria);
 

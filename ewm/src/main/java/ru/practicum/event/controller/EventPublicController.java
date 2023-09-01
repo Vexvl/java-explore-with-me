@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.model.AdminParams;
+import ru.practicum.event.model.PublicParams;
 import ru.practicum.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,18 +28,31 @@ public class EventPublicController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEventsParams(@RequestParam(required = false) String text,
-                                               @RequestParam(required = false) List<Integer> categories,
-                                               @RequestParam(required = false) Boolean paid,
-                                               @RequestParam(name = "rangeStart", required = false)
-                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-                                               @RequestParam(name = "rangeEnd", required = false)
-                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-                                               @RequestParam(required = false) Boolean onlyAvailable,
-                                               @RequestParam(required = false) String sort,
-                                               @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
-                                               @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
-        return eventsService.getEventsParams(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
-                from, size, httpServletRequest.getRemoteAddr());
+                                              @RequestParam(required = false) List<Integer> categories,
+                                              @RequestParam(required = false) Boolean paid,
+                                              @RequestParam(name = "rangeStart", required = false)
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                              @RequestParam(name = "rangeEnd", required = false)
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+                                              @RequestParam(required = false) Boolean onlyAvailable,
+                                              @RequestParam(required = false) String sort,
+                                              @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                              @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
+
+        PublicParams publicParams = PublicParams.builder()
+                .text(text)
+                .categories(categories)
+                .paid(paid)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .onlyAvailable(onlyAvailable)
+                .sortParameter(sort)
+                .from(from)
+                .size(size)
+                .ip(httpServletRequest.getRemoteAddr())
+                .build();
+
+        return eventsService.getEventsParams(publicParams);
     }
 
     @GetMapping("/{id}")

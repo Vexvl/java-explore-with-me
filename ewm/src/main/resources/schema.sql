@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS events
     request_moderation BOOLEAN,
     category           BIGINT,
     participant_limit  INTEGER                                 NOT NULL,
-    state              VARCHAR,
+    state              VARCHAR(40),
     paid               BOOLEAN                                 NOT NULL,
     users              BIGINT                                  NOT NULL,
     CONSTRAINT pk_events PRIMARY KEY (id),
