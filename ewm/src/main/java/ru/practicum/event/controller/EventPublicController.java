@@ -61,7 +61,7 @@ public class EventPublicController {
     }
 
     @GetMapping("/popular")
-    public List<EventFullDto> getPopularEvents(@RequestParam(defaultValue = "10") int count){
+    public List<EventFullDto> getPopularEvents(@RequestParam(defaultValue = "10") int count) {
         return eventsService.getPopularEvents(count);
     }
 }
