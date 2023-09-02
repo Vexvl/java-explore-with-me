@@ -17,7 +17,13 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
 import ru.practicum.event.mapper.EventMapper;
-import ru.practicum.event.model.*;
+import ru.practicum.event.model.Event;
+import ru.practicum.event.model.EventState;
+import ru.practicum.event.model.UserRequestState;
+import ru.practicum.event.model.AdminParams;
+import ru.practicum.event.model.PublicParams;
+import ru.practicum.event.model.AdminRequestState;
+import ru.practicum.event.model.SortParameter;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.repository.EventSpecification;
 import ru.practicum.exception.AbsenceException;
@@ -203,8 +209,6 @@ public class EventServiceImpl implements EventService {
                 case SEND_TO_REVIEW:
                     state = EventState.PENDING;
                     break;
-                default:
-                    throw new IllegalStateException("IllegalStateException");
             }
         }
 
