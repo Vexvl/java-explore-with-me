@@ -550,12 +550,12 @@
 							"pm.test(\"Test event[0] 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData[0]).to.have.property('id');\r",
-							"    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+							"    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
 							"});\r",
 							"pm.test(\"Test event[1] 'id' field\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData[1]).to.have.property('id');\r",
-							"    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);\r",
+							"    pm.expect(jsonData[1].id, '\"id\" must be 3').to.eql(3);\r",
 							"});"
 						],
 						"type": "text/javascript"
