@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dislikedEvents.service.DislikedEventsService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
 import ru.practicum.event.service.EventService;
+import ru.practicum.likedEvents.service.LikedEventsService;
 import ru.practicum.validator.EventStartBefore;
 
 import javax.validation.Valid;
@@ -25,6 +27,8 @@ import java.util.List;
 public class EventPrivateController {
 
     private final EventService eventsService;
+    private final LikedEventsService likedEventsService;
+    private final DislikedEventsService dislikedEventsService;
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,5 +57,17 @@ public class EventPrivateController {
     public EventFullDto getEventById(@PathVariable Long userId,
                                      @PathVariable Long eventId) {
         return eventsService.getUserEventById(userId, eventId);
+    }
+
+    @PostMapping("/{userId}/events/{eventId}/like")
+    @ResponseStatus(HttpStatus.OK)
+    public void addLike(@PathVariable Long userId, @PathVariable Long eventId) {
+        likedEventsService.addLike(userId, eventId);
+    }
+
+    @DeleteMapping("/{userId}/events/{eventId}/like")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLike(@PathVariable Long userId, @PathVariable Long eventId) {
+        dislikedEventsService.deleteLike(userId, eventId);
     }
 }

@@ -6,10 +6,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
+import ru.practicum.event.model.Event;
 import ru.practicum.event.model.PublicParams;
 import ru.practicum.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -58,5 +60,10 @@ public class EventPublicController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventById(@PathVariable Long id) {
         return eventsService.getEventById(id, httpServletRequest.getRemoteAddr());
+    }
+
+    @GetMapping("/popular")
+    public List<EventFullDto> getPopularEvents(@RequestParam(defaultValue = "10") int count){
+        return eventsService.getPopularEvents(count);
     }
 }

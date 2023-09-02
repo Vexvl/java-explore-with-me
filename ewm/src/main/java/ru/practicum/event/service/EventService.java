@@ -25,4 +25,6 @@ public interface EventService {
     EventFullDto getUserEventById(Long userId, Long eventId);
 
     EventFullDto updateEvent(Long userId, Long eventId, UpdateEventDto updateEventDto);
+
+    List<EventFullDto> getPopularEvents(int count);
 }
