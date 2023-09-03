@@ -30,9 +30,9 @@ public class DislikedEvents {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
     private Event event;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 }
