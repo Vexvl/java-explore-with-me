@@ -1,7 +1,7 @@
-package ru.practicum.likedEvents.repository;
+package ru.practicum.liked_events.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.practicum.likedEvents.model.LikedEvents;
+import ru.practicum.liked_events.model.LikedEvents;
 
 public interface LikedEventsRepository extends JpaRepository<LikedEvents, Long> {
 

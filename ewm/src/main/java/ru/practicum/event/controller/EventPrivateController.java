@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dislikedEvents.service.DislikedEventsService;
+import ru.practicum.disliked_events.service.DislikedEventsService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
 import ru.practicum.event.service.EventService;
-import ru.practicum.likedEvents.service.LikedEventsService;
+import ru.practicum.liked_events.service.LikedEventsService;
 import ru.practicum.validator.EventStartBefore;
 
 import javax.validation.Valid;

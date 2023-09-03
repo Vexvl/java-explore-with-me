@@ -1,7 +1,7 @@
-package ru.practicum.dislikedEvents.mapper;
+package ru.practicum.disliked_events.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.dislikedEvents.model.DislikedEvents;
+import ru.practicum.disliked_events.model.DislikedEvents;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 

@@ -1,15 +1,15 @@
-package ru.practicum.likedEvents.service;
+package ru.practicum.liked_events.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dislikedEvents.repository.DislikedEventsRepository;
+import ru.practicum.disliked_events.repository.DislikedEventsRepository;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.AbsenceException;
 import ru.practicum.exception.RatingAlreadyExistsException;
-import ru.practicum.likedEvents.mapper.LikedEventsMapper;
-import ru.practicum.likedEvents.repository.LikedEventsRepository;
+import ru.practicum.liked_events.mapper.LikedEventsMapper;
+import ru.practicum.liked_events.repository.LikedEventsRepository;
 import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 

@@ -11,7 +11,7 @@ import ru.practicum.EndpointDto;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
-import ru.practicum.dislikedEvents.repository.DislikedEventsRepository;
+import ru.practicum.disliked_events.repository.DislikedEventsRepository;
 import ru.practicum.event.criteria.EventCriteria;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
@@ -30,7 +30,7 @@ import ru.practicum.event.repository.EventSpecification;
 import ru.practicum.exception.AbsenceException;
 import ru.practicum.exception.EventWrongTimeException;
 import ru.practicum.exception.WrongEventStateException;
-import ru.practicum.likedEvents.repository.LikedEventsRepository;
+import ru.practicum.liked_events.repository.LikedEventsRepository;
 import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 

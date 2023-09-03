@@ -1,4 +1,4 @@
-package ru.practicum.dislikedEvents.model;
+package ru.practicum.liked_events.model;
 
 import lombok.*;
 import ru.practicum.event.model.Event;
@@ -7,13 +7,13 @@ import ru.practicum.user.model.User;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "disliked")
+@Table(name = "liked")
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DislikedEvents {
+public class LikedEvents {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

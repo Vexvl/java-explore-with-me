@@ -1,8 +1,8 @@
-package ru.practicum.likedEvents.mapper;
+package ru.practicum.liked_events.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.event.model.Event;
-import ru.practicum.likedEvents.model.LikedEvents;
+import ru.practicum.liked_events.model.LikedEvents;
 import ru.practicum.user.model.User;
 
 @UtilityClass
