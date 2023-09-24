@@ -29,6 +29,12 @@ public class ExceptionsHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleRatingAlreadyExistsException(RatingAlreadyExistsException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleNameExistsException(NameExistsException e) {
         return new ErrorResponse(e.getMessage());
     }

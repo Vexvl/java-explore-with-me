@@ -12,7 +12,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class EventSpecification implements Specification<Event> {
     private final EventCriteria criteria;
     private final List<Predicate> predicateList;

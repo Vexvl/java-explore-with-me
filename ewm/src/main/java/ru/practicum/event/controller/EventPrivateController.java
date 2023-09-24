@@ -4,12 +4,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import ru.practicum.disliked_events.service.DislikedEventsService;
 import ru.practicum.event.dto.EventFullDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.NewEventDto;
 import ru.practicum.event.dto.UpdateEventDto;
 import ru.practicum.event.service.EventService;
+import ru.practicum.liked_events.service.LikedEventsService;
 import ru.practicum.validator.EventStartBefore;
 
 import javax.validation.Valid;
@@ -25,6 +36,8 @@ import java.util.List;
 public class EventPrivateController {
 
     private final EventService eventsService;
+    private final LikedEventsService likedEventsService;
+    private final DislikedEventsService dislikedEventsService;
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,5 +66,17 @@ public class EventPrivateController {
     public EventFullDto getEventById(@PathVariable Long userId,
                                      @PathVariable Long eventId) {
         return eventsService.getUserEventById(userId, eventId);
+    }
+
+    @PostMapping("/{userId}/events/{eventId}/like")
+    @ResponseStatus(HttpStatus.OK)
+    public void addLike(@PathVariable Long userId, @PathVariable Long eventId) {
+        likedEventsService.addLike(userId, eventId);
+    }
+
+    @DeleteMapping("/{userId}/events/{eventId}/like")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteLike(@PathVariable Long userId, @PathVariable Long eventId) {
+        dislikedEventsService.deleteLike(userId, eventId);
     }
 }
